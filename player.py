@@ -1,5 +1,7 @@
 import pygame
 
+dude = pygame.image.load(r'C:\Users\Eric\Computer Science Game Project\sprite\NewGumbo.png').convert()
+
 class Player():
     """Responsible for the creation of the Character itself"""
     def __init__ (self, x, y, window, bounds):
@@ -28,9 +30,9 @@ class Player():
         self.down_pressed = False
     
     
-    def draw(self):
+    def draw(self,window):
         """Draws the Character on the Screen """
-        pygame.draw.rect(self.window,self.color,self.rect)
+        window.blit(dude, (self.x, self.y))
         
   
     
@@ -55,3 +57,8 @@ class Player():
             self.movement[1] = self.bounds[1] - self.y
 
         self.rect = pygame.Rect(self.movement[0], self.movement[1], self.x, self.y)
+   
+
+
+
+    
