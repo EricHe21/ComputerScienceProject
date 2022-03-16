@@ -1,6 +1,9 @@
 import pygame
+import math
+from projectile import Bullet
 
 player = pygame.image.load("sprites/NewGumbo.png")
+bullets = []
 
 class Player():
     """Responsible for the creation of the Character itself"""
@@ -35,6 +38,23 @@ class Player():
 
     def getPlayerPositionY(self):
         return int(self.movement[1])
+
+    def shoot(self, dt):
+        pos = pygame.mouse.get_pos()
+        x_dist = (pos[0] - self.movement[0])
+        y_dist = -(pos[1] - self.movement[1])
+        self.angle = float(math.atan2(y_dist, x_dist))
+
+        if pygame.mouse.get_pressed()[0] and self.fire == False:
+            self.fire = True
+            bullet = Bullet((self.movement[0] + self.x/2), (self.movement[1] + self.y/2), self.angle, self.window)
+            bullets.append(bullet)
+        if pygame.mouse.get_pressed()[0] == False:
+            self.fire = False
+
+        for iteam in bullets:
+            Bullet.drawbullet(iteam)
+            Bullet.update(iteam)
     
     """Draws the Character On Screen"""
     def draw(self, dt):
@@ -60,8 +80,4 @@ class Player():
             self.movement[1] = self.bounds[1] - self.y
 
         self.window.blit(player, (self.movement[0], self.movement[1]))
-   
 
-
-
-    
