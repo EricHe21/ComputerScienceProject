@@ -3,6 +3,8 @@ from pygame.locals import *
 from player import Player
 import time
 from enemy import Enemy
+from projectile import Bullet
+
 import sys
 
 pygame.init()  # Initializes pygame
@@ -17,9 +19,10 @@ screen = pygame.display.set_mode((monitor_res[0], monitor_res[1]), pygame.FULLSC
 clock = pygame.time.Clock()
 previousTime = time.time()
 
-# Player and Enemy Initialization
+# Player and Enemy 
 player = Player(screen, monitor_res)
-enemy = Enemy(40, 40, 32, 32, 500, screen)
+enemy = Enemy(500, 500, 32, 32, 500, screen)
+bullet = Bullet.drawbullet
 
 
 # Responsible for Drawing items onto the Screen (Use the Function for Drawings)
@@ -27,8 +30,8 @@ def redrawGameWindow(bullets=None):
     screen.fill((0, 0, 0))  # Constantly refreshes the screen with the color black
 
     player.shoot(dt)
-    enemy.draw(screen, dt)
-    player.draw(dt)  # Detects button inputs of the user as well as its position on screen
+    enemy.enemy_draw(screen, dt)
+    player.player_draw(screen, dt, enemy)  # Detects button inputs of the user as well as its position on screen
     pygame.display.flip()  # Updates the entirety of all the contents on the screen
 
 
