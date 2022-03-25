@@ -1,5 +1,7 @@
 import pygame  
 
+
+
 """finds the images from your file and allows vcs to access them""" 
 slime = pygame.image.load("sprites/Slime01.png")
 
@@ -20,6 +22,18 @@ class Enemy():
 
         """How fast the images is moving"""
         self.vel = 200
+
+        self.visible = True
+        self.enemy_health = 3
+    """sees if the bullets of the player has hit the enemy and wont work once the enemy is out of health """
+    def hit(self):
+        if self.enemy_health > 0: 
+            self.enemy_health -= 1
+        else:
+            self.visible = False
+
+
+
 
     def move(self, dt):
         """handles the movemet of the enemy"""
@@ -44,13 +58,13 @@ class Enemy():
 
         """Draws the images on the screen with its x and y values"""
     def enemy_draw(self, window, dt):
-        
-        """"Draws the enemy on the screen"""
-
-        window.blit(slime, (self.x, self.y))
-
-        """We put the self.hitbox here because it allows the hitbox itself to move with the enmey"""
-        self.enemy_hitbox = (self.x, self.y , 110, 55)
-        
         """alllows the images to move"""
         self.move(dt)
+        
+        """"WIll only run when the enemy is not dead"""
+        if self.visible == True:
+            """"Draws the enemy on the screen"""
+            window.blit(slime, (self.x, self.y))
+            """We put the self.hitbox here because it allows the hitbox itself to move with the enmey"""
+            self.enemy_hitbox = (self.x, self.y , 110, 55)
+            
