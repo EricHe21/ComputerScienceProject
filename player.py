@@ -32,6 +32,8 @@ class Player():
  
         self.health = 5
         self.visible = True
+
+        self.score = 0
     
     
     def getPlayerWidth(self):
@@ -98,12 +100,15 @@ class Player():
 
                 if abs(self.player_HitBoxRect.left - enemy_HitBoxRect.right) < collision_tolerance:
                     self.movement[0] = enemy_HitBoxRect.x + 250
+                self.score -= 5
+                    
         """"Sees if the bullet is inside of the enemy hitbox and will pop the bullet out of the list once they hit"""        
         if enemy.visible == True:
             for bullet in bullets:
                 if bullet.y - bullet.radius < enemy_HitBoxRect[1] + enemy_HitBoxRect[3] and bullet.y + bullet.radius > enemy_HitBoxRect[1]:
                     if bullet.x + bullet.radius > enemy_HitBoxRect[0] and bullet.x - bullet.radius < enemy_HitBoxRect[0] + enemy_HitBoxRect[2]:
                         bullets.pop(bullets.index(bullet))
+                        self.score += 10
                         enemy.hit()
     
 
@@ -129,16 +134,7 @@ class Player():
             self.movement[1] = 0
         if self.movement[1] + self.y >= self.bounds[1]:
             self.movement[1] = self.bounds[1] - self.y
-        
+
         self.hit(enemy)
-
-
-
         self.player_hitbox = (self.movement[0], self.movement[1] + 20, 90, 120)
         window.blit(player, (self.movement[0], self.movement[1]))
-    
- 
- 
- 
-   
-

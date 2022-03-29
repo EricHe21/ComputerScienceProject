@@ -25,9 +25,14 @@ enemy = Enemy(500, 500, 32, 32, 500, screen)
 bullet = Bullet.drawbullet
 
 
+font = pygame.font.SysFont('comicsans', 30, True)
+
 # Responsible for Drawing items onto the Screen (Use the Function for Drawings)
 def redrawGameWindow(bullets=None):
     screen.fill((0, 0, 0))  # Constantly refreshes the screen with the color black
+
+    text = font.render('Score: '+ str(player.score) , 1, (255,250,250))
+    screen.blit(text, (0,0))
 
     player.shoot(dt)
     enemy.enemy_draw(screen, dt)

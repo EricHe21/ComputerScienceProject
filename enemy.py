@@ -25,15 +25,13 @@ class Enemy():
 
         self.visible = True
         self.enemy_health = 3
+
     """sees if the bullets of the player has hit the enemy and wont work once the enemy is out of health """
     def hit(self):
-        if self.enemy_health > 0: 
+        if self.enemy_health > 1: 
             self.enemy_health -= 1
         else:
             self.visible = False
-
-
-
 
     def move(self, dt):
         """handles the movemet of the enemy"""
