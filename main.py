@@ -1,11 +1,9 @@
-import pygame
+import pygame, time, sys
 from pygame.locals import *
 from player import Player
-import time
 from enemy import Enemy
 from projectile import Bullet
 
-import sys
 
 pygame.init()  # Initializes pygame
 
@@ -21,9 +19,8 @@ previousTime = time.time()
 
 # Player and Enemy 
 player = Player(screen, monitor_res)
-enemy = Enemy(500, 500, 32, 32, 500, screen)
+enemy = Enemy(500, 500, 32, 32, screen)
 bullet = Bullet.drawbullet
-
 
 font = pygame.font.SysFont('comicsans', 30, True)
 
@@ -31,11 +28,11 @@ font = pygame.font.SysFont('comicsans', 30, True)
 def redrawGameWindow(bullets=None):
     screen.fill((0, 0, 0))  # Constantly refreshes the screen with the color black
 
-    text = font.render('Score: '+ str(player.score) , 1, (255,250,250))
+    text = font.render('Score: '+ str(player.score) , 1, (255,255,255))
     screen.blit(text, (0,0))
 
-    player.shoot(dt)
-    enemy.enemy_draw(screen, dt)
+    player.shoot(screen)
+    enemy.enemy_draw(screen, dt, player)
     player.player_draw(screen, dt, enemy)  # Detects button inputs of the user as well as its position on screen
     pygame.display.flip()  # Updates the entirety of all the contents on the screen
 
