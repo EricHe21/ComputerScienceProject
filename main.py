@@ -3,41 +3,37 @@ from pygame.locals import *
 from player import Player
 import time
 from enemy import Enemy
-from projectile import Bullet
+from tiles import *
+from spritesheet import *
 
-import sys
 
-pygame.init()  # Initializes pygame
+pygame.init() #Initializes pygame
 
-# gets the size of the current monitor that is being used
-monitor_res = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+screen_res = (1920,1088) #Resolution of the game screen
 
-# Sets the size of the game window
-screen = pygame.display.set_mode((monitor_res[0], monitor_res[1]), pygame.FULLSCREEN)
+#sets the display for the game window and the desired background
+screen = pygame.display.set_mode(screen_res, pygame.RESIZABLE)
+bg = pygame.image.load("Stage1 Assets\Stage1Floor.png").convert_alpha()
 
-# Runs Game for as long as the user wants
+#Runs Game for as long as the user wants
 clock = pygame.time.Clock()
 previousTime = time.time()
 
-# Player and Enemy 
-player = Player(screen, monitor_res)
-enemy = Enemy(500, 500, 32, 32, 500, screen)
-bullet = Bullet.drawbullet
 
+#Game Spritesheet Initialization
+S1spritesheet = Spritesheet("Stage1 Assets\Stage1 Spritesheet.png")
+player = Player(screen)
+enemy = Enemy(screen)
+map = TileMap("Stage1 Assets\Stage1Starting.csv", S1spritesheet)
 
-font = pygame.font.SysFont('comicsans', 30, True)
-
-# Responsible for Drawing items onto the Screen (Use the Function for Drawings)
-def redrawGameWindow(bullets=None):
-    screen.fill((0, 0, 0))  # Constantly refreshes the screen with the color black
-
-    text = font.render('Score: '+ str(player.score) , 1, (255,250,250))
-    screen.blit(text, (0,0))
-
-    player.shoot(dt)
-    enemy.enemy_draw(screen, dt)
-    player.player_draw(screen, dt, enemy)  # Detects button inputs of the user as well as its position on screen
-    pygame.display.flip()  # Updates the entirety of all the contents on the screen
+#Responsible for Drawing items onto the Screen (Use the Function for Drawings)
+def redrawGameWindow():
+        screen.blit(bg, (0,0))
+        player.update(dt,map.tiles)
+        map.draw_map(screen)
+        player.draw(screen)
+        enemy.draw(screen)
+        pygame.display.flip() #Updates the entirety of all the contents on the screen
 
 
 # Controls the main events of the game (i.e. Movement, shooting, etc.)
@@ -47,38 +43,47 @@ while True:
     dt = currentTime - previousTime
     previousTime = currentTime
 
-    playerX = player.getPlayerPositionX()
-    playerY = player.getPlayerPositionY()
-    playerW = player.getPlayerWidth()
-    playerH = player.getPlayerHeight()
-
     for event in pygame.event.get():
-        # Quits the game when the user presses the quit button
+        #Quits the game when the user presses the quit button
         if event.type == QUIT:
             pygame.quit()
-            sys.exit()
-
-
-        # Detects whenever the user presses down on a key
+        #Detects whenever the user presses down on a key
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                player.left_pressed = True
-            if event.key == pygame.K_RIGHT:
-                player.right_pressed = True
-            if event.key == pygame.K_UP:
-                player.up_pressed = True
-            if event.key == pygame.K_DOWN:
-                player.down_pressed = True
-        # Detects whenever the user pressed up on a key
+                    if event.key == pygame.K_a:
+                        player.left_pressed = True
+                        player.face_left = True
+                        player.face_right = False
+                        player.face_up = False 
+                        player.face_down = False 
+                    if event.key == pygame.K_d:
+                        player.right_pressed = True
+                        player.face_left = False
+                        player.face_right = True
+                        player.face_up = False 
+                        player.face_down = False               
+                    if event.key == pygame.K_w:
+                        player.up_pressed = True
+                        player.face_left = False
+                        player.face_right = False
+                        player.face_up = True
+                        player.face_down = False
+                    if event.key == pygame.K_s:
+                        player.down_pressed = True
+                        player.face_left = False
+                        player.face_right = False
+                        player.face_up = False 
+                        player.face_down = True
+       
+        #Detects whenever the user pressed up on a key
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                player.left_pressed = False
-            if event.key == pygame.K_RIGHT:
-                player.right_pressed = False
-            if event.key == pygame.K_UP:
-                player.up_pressed = False
-            if event.key == pygame.K_DOWN:
-                player.down_pressed = False
+                    if event.key == pygame.K_a:
+                        player.left_pressed = False
+                    if event.key == pygame.K_d:
+                        player.right_pressed = False
+                    if event.key == pygame.K_w:
+                        player.up_pressed = False
+                    if event.key == pygame.K_s:
+                        player.down_pressed = False 
 
-    redrawGameWindow()
-    clock.tick()  # Tracks time (FPS) of the game
+    redrawGameWindow() #Redraws window Tiles, Player, and Enemy
+    clock.tick() #Tracks time (FPS) of the game
