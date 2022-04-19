@@ -24,15 +24,14 @@ S1spritesheet = Spritesheet("Stage1 Assets\Stage1 Spritesheet.png")
 player = Player(screen)
 map = TileMap("Stage1 Assets\Stage1Starting.csv", S1spritesheet)
 
+#sprite groups
 allGroup = pygame.sprite.Group()
 allGroup.add(player)
-
 playerGroup = pygame.sprite.Group()
 playerGroup.add(player)
-
 bulletGroup = pygame.sprite.Group()
-
 enemyGroup = pygame.sprite.Group()
+#allows more then one enemy to spawn
 for i in range(1):
     enemy = Enemy(screen)
     allGroup.add(enemy)

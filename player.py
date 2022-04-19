@@ -76,8 +76,9 @@ class Player(pygame.sprite.Sprite):
         if self.health <= self.max_health:
             self.health = self.max_health
             self.healthBar = Spritesheet("Character Assets\HealthBars.png").parse_sprite("Health Bar 1.png")
-            print(self.health)
 
+
+    #sees of the player has hit the enemy and if so, they will lose health
     def playerCollision(self, playerGroup, enemyGroup, enemy):
         if pygame.sprite.groupcollide(playerGroup, enemyGroup, False, False):
 

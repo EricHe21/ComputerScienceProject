@@ -21,7 +21,8 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 1
     
         self.enemy_health = 3
-
+        
+    #stops the enemy from going inside of the player and crashing the game
     def enemyCollision(self, player):
                 if self.rect.colliderect(player.rect):
                         if abs(self.rect.top - player.rect.bottom) < 10:
@@ -46,7 +47,7 @@ class Enemy(pygame.sprite.Sprite):
                 dirvect.scale_to_length(self.speed)
                 self.rect.move_ip(dirvect)
 
-    def update(self, player ):
+    def update(self, player):
         self.move_towards_player(player)
         self.enemyCollision(player)
         if self.enemy_health <= 0:
