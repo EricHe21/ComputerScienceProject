@@ -1,56 +1,55 @@
-import pygame
+import pygame, math, random
+from spritesheet import Spritesheet
+from tiles import TileMap
 
-"""finds the images from your file and allows vcs to access them""" 
-slime = pygame.image.load("sprites/Slime01.png")
+screen_res = (1920,1088)
+class Enemy(pygame.sprite.Sprite):
+    """Responsible for making the Enemy itself"""
+    def __init__(self, window):
+        pygame.sprite.Sprite.__init__(self)
 
-class Enemy():
-    def __init__(self, x, y, width, height, window):
-        """The x and y self values are there to allows you to place the images on the screen"""
-        self.x = x
-        self.y = y
+        #Initalizes the Enemy's avatar via a spritesheet
+        self.image = Spritesheet("Character Assets\Character Sprites.png").parse_sprite("Sprite-0001.png")
+        self.rect = self.image.get_rect() #Grabs the charatcers rectangle
+
         self.window = window
-        self.width = width
-        self.height = height
 
-        """"How fast the enemy is moving"""
-        self.speed= 250
-        
-        """defines the hitbox"""
-        self.enemy_hitbox = (self.x, self.y , 110, 55)
+        #Sets the Enemy's initial position on the screen
+        self.rect.x = random.randrange(screen_res[0] - self.rect.w)
+        self.rect.y = random.randrange(100, 800)
 
-        self.visible = True
+        self.speed = 1
+    
         self.enemy_health = 3
 
-    """sees if the bullets of the player has hit the enemy and wont work once the enemy is out of health """
-    def enemy_hurt(self):
-        if self.enemy_health > 1: 
-            self.enemy_health -= 1
-        else:
-            self.visible = False
+    def enemyCollision(self, player):
+                if self.rect.colliderect(player.rect):
+                        if abs(self.rect.top - player.rect.bottom) < 10:
+                            self.rect.y = (self.rect.y + self.rect.h) - 90
 
-    """allows the enemy to follow the player"""
-    def move(self, dt, player): 
-        """"follows the player alonge the x axis"""
-        if self.x > player.movement[0]:
-            self.x -= self.speed * dt
-        elif self.x < player.movement[0]:
-            self.x += self.speed * dt
+                        if abs(self.rect.bottom - player.rect.top) < 10:
+                            self.rect.y = (player.rect.y - player.rect.h) + 15
+                            
+                        if abs(self.rect.right - player.rect.left) < 10:
+                            self.rect.x = (self.rect.x - self.rect.w) + 95
+                            
+                        if abs(self.rect.left - player.rect.right) < 10:
+                            self.rect.x = self.rect.x + 1
+                        
 
-        """""follows the player on the y axis"""""
-        if self.y < player.movement[1]:
-            self.y += self.speed * dt
-        elif self.y > player.movement[1]:
-            self.y -= self.speed * dt
+    def move_towards_player(self, player):
+                # Find direction vector (dx, dy) between enemy and player.
+                dirvect = pygame.math.Vector2(player.rect.x - self.rect.x,
+                                            player.rect.y - self.rect.y)
+                dirvect.normalize()
+                # Move along this normalized vector towards the player at current speed.
+                dirvect.scale_to_length(self.speed)
+                self.rect.move_ip(dirvect)
 
-        """Draws the images on the screen with its x and y values"""
-    def enemy_draw(self, window, dt, player):
-        """alllows the images to move to the player"""
-        self.move(dt, player)
-        
-        """"WIll only run when the enemy is not dead"""
-        if self.visible == True:
-            """"Draws the enemy on the screen"""
-            window.blit(slime, (self.x, self.y))
-            """We put the self.hitbox here because it allows the hitbox itself to move with the enmey"""
-            self.enemy_hitbox = (self.x, self.y , 110, 55)
-            
+    def update(self, player ):
+        self.move_towards_player(player)
+        self.enemyCollision(player)
+        if self.enemy_health <= 0:
+            self.kill() 
+            del self 
+

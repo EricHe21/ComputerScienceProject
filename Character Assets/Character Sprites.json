@@ -1,0 +1,28 @@
+{"frames": {
+
+"NewGumbo.png":
+{
+	"frame": {"x":0,"y":0,"w":72,"h":112},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":112},
+	"sourceSize": {"w":72,"h":112}
+},
+"Sprite-0001.png":
+{
+	"frame": {"x":72,"y":0,"w":96,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
+	"sourceSize": {"w":96,"h":96}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Character Sprites.png",
+	"format": "RGBA8888",
+	"size": {"w":168,"h":112},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c4d4c345e2bb15e2a0b32138a1136d25:7a21fefecd491be8b6c485b14f437290:cc7a4eeb9b86ec0678554bd98807b268$"
+}
+}
