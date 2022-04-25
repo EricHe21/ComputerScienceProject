@@ -2,7 +2,8 @@ import pygame, math, random
 from spritesheet import Spritesheet
 from tiles import TileMap
 
-screen_res = (1920,1088)
+#a list of cords that represent the doors in the level
+spawnPoint = [(900, 0), (0, 450), (900, 990), (1800, 450)]
 class Enemy(pygame.sprite.Sprite):
     """Responsible for making the Enemy itself"""
     def __init__(self, window):
@@ -15,14 +16,13 @@ class Enemy(pygame.sprite.Sprite):
         self.window = window
 
         #Sets the Enemy's initial position on the screen
-        self.rect.x = random.randrange(screen_res[0] - self.rect.w)
-        self.rect.y = random.randrange(100, 800)
-
-        self.speed = 1
+        self.rect.x ,self.rect.y = random.choice(spawnPoint)
+        
+        self.speed = 1.5
     
         self.enemy_health = 3
-        
-    #stops the enemy from going inside of the player and crashing the game
+
+            
     def enemyCollision(self, player):
                 if self.rect.colliderect(player.rect):
                         if abs(self.rect.top - player.rect.bottom) < 10:
@@ -47,10 +47,9 @@ class Enemy(pygame.sprite.Sprite):
                 dirvect.scale_to_length(self.speed)
                 self.rect.move_ip(dirvect)
 
-    def update(self, player):
+    def update(self, player ):
         self.move_towards_player(player)
         self.enemyCollision(player)
         if self.enemy_health <= 0:
             self.kill() 
             del self 
-

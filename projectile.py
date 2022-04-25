@@ -25,17 +25,17 @@ class Bullet(pygame.sprite.Sprite):
         return hits
 
 
-    #stops the bullets from going off screen by killing them
+    #Checks to see if the player has collided with a tile on the left or right side
     def checkCollisions(self, tiles):
         collisions = self.hits(tiles)
         for tile in collisions:
-            if abs(self.rect.right - tile.rect.left) < 10: 
+            if abs(self.rect.right - tile.rect.left) < 10:  # Hit tile moving right
                 self.kill()
-            if abs(self.rect.left - tile.rect.right) < 10: 
+            if abs(self.rect.left - tile.rect.right) < 10:  # Hit tile moving left
                 self.kill()  
-            if abs(self.rect.bottom - tile.rect.top) < 10:  
-                self.kill()               
-            if abs(self.rect.top - tile.rect.bottom) < 10:  
+            if abs(self.rect.bottom - tile.rect.top) < 10:  # Hit tile moving Down
+                self.kill()  
+            if abs(self.rect.top - tile.rect.bottom) < 10:  # Hit tile moving Up
                 self.kill()   
 
 

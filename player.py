@@ -10,13 +10,17 @@ class Player(pygame.sprite.Sprite):
         #Initializes the players avatar via a spritesheet
         self.image = Spritesheet("Character Assets\Character Sprites.png").parse_sprite("NewGumbo.png")
         self.rect = self.image.get_rect() #Grabs the characters rectangle
-       
+
+        self.ID = 0
+        self.fire = True 
+
         self.window = window 
+        self.windowRect = window.get_rect()
 
         #Sets the characters Origin position to the center of the screen
         self.rect.x = (self.window.get_width() / 2) - 50 
         self.rect.y = (self.window.get_height() / 2) - 100
-
+        
         #Control the characters speed and position
         self.position, self.velocity = pygame.math.Vector2(self.rect.x,self.rect.y), pygame.math.Vector2(self.rect.x,self.rect.y)
 
@@ -76,9 +80,8 @@ class Player(pygame.sprite.Sprite):
         if self.health <= self.max_health:
             self.health = self.max_health
             self.healthBar = Spritesheet("Character Assets\HealthBars.png").parse_sprite("Health Bar 1.png")
+            print(self.health)
 
-
-    #sees of the player has hit the enemy and if so, they will lose health
     def playerCollision(self, playerGroup, enemyGroup, enemy):
         if pygame.sprite.groupcollide(playerGroup, enemyGroup, False, False):
 
@@ -107,7 +110,12 @@ class Player(pygame.sprite.Sprite):
             elif abs(self.rect.left - tile.rect.right) < 10:  # Hit tile moving left
                 self.position.x = tile.rect.right
                 self.rect.x = self.position.x
-
+        if abs(self.rect.left - self.windowRect.left) < 10:
+            self.position.x = self.windowRect.left + 10
+            self.rect.x = self.position.x
+        if abs(self.rect.right - self.windowRect.right) < 10:
+            self.position.x = self.windowRect.right - (self.rect.w + 10)
+            self.rect.x = self.position.x
 
     #Checks to see if the player has collided with a tile on the Upper or Bottom side
     def checkCollisionsy(self, tiles):
@@ -117,9 +125,15 @@ class Player(pygame.sprite.Sprite):
                 self.position.y = tile.rect.top - self.rect.h
                 self.rect.y = self.position.y
             elif abs(self.rect.top - tile.rect.bottom) < 10:  # Hit tile moving Up
-                self.position.y = tile.rect.h
+                self.position.y = tile.rect.bottom
                 self.rect.y = self.position.y
-
+        if abs(self.rect.top - self.windowRect.top) < 10:
+            self.position.y = self.windowRect.top + 10
+            self.rect.y = self.position.y
+        if abs(self.rect.bottom - self.windowRect.bottom) < 10:
+            self.position.y = self.windowRect.bottom - (self.rect.h + 10 ) 
+            self.rect.y = self.position.y
+            
     def drawHealth(self, window):
         window.blit(self.healthBar, (self.healthRect.x, self.healthRect.y))
 
